@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Burger Menu - Smart TV Display</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ffffff;
+            overflow: hidden;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+        }
+
+        /* Added intro page styling */
+        .intro-page {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            background-color: #ffffff;
+            animation: introFadeIn 1s ease-out forwards;
+        }
+
+        .intro-page.fade-out {
+            animation: introFadeOut 1s ease-out forwards;
+        }
+
+        @keyframes introFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes introFadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+
+        .intro-content {
+            text-align: center;
+        }
+
+        .intro-title {
+            font-size: 80px;
+            font-weight: 700;
+            color: #2c2c2c;
+            letter-spacing: -2px;
+            margin-bottom: 40px;
+            animation: titleSlideIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        @keyframes titleSlideIn {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .intro-subtitle {
+            font-size: 24px;
+            color: #999;
+            font-weight: 300;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            animation: subtitleSlideIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s forwards;
+            opacity: 0;
+        }
+
+        @keyframes subtitleSlideIn {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Parallax Background Elements */
+        .parallax-bg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .parallax-item {
+            position: absolute;
+            opacity: 0.15;
+            background-size: cover;
+            background-position: center;
+            animation: parallaxFloat 8s ease-in-out infinite;
+        }
+
+        @keyframes parallaxFloat {
+            0%, 100% { transform: translateY(0px) translateX(0px); opacity: 0.08; }
+            50% { transform: translateY(-40px) translateX(20px); opacity: 0.15; }
+        }
+
+        .parallax-item:nth-child(1) { top: 5%; left: 8%; width: 200px; height: 200px; animation-delay: 0s; border-radius: 20px; background-image: url('./images/ChatGPT_Image_Dec_5__2025__07_10_27_AM-removebg-preview.png');  }
+        .parallax-item:nth-child(2) { top: 65%; right: 12%; width: 180px; height: 180px; animation-delay: 1s; border-radius: 20px; background-image: url('./images/ChatGPT_Image_Dec_5__2025__07_10_27_AM-removebg-preview.png'); }
+        .parallax-item:nth-child(3) { top: 25%; right: 18%; width: 220px; height: 220px; animation-delay: 2s; border-radius: 20px; background-image: url('./images/ChatGPT_Image_Dec_5__2025__07_10_27_AM-removebg-preview.png'); }
+        .parallax-item:nth-child(4) { top: 55%; left: 12%; width: 160px; height: 160px; animation-delay: 1.5s; border-radius: 20px; background-image: url('./images/ChatGPT_Image_Dec_5__2025__07_10_27_AM-removebg-preview.png'); }
+        .parallax-item:nth-child(5) { top: 15%; left: 22%; width: 190px; height: 190px; animation-delay: 2.5s; border-radius: 20px; background-image: url('./images/ChatGPT_Image_Dec_5__2025__07_10_27_AM-removebg-preview.png'); }
+        .parallax-item:nth-child(6) { bottom: 12%; right: 8%; width: 170px; height: 170px; animation-delay: 0.5s; border-radius: 20px; background-image: url('./images/ChatGPT_Image_Dec_5__2025__07_10_27_AM-removebg-preview.png');}
+
+        /* Updated content area for better centering */
+        .content {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 10;
+            gap: 80px;
+            padding: 60px 120px;
+        }
+
+        /* Left Side - Text */
+        .text-section {
+            flex: 0 0 35%;
+            animation: fadeIn 1.2s ease-out forwards;
+            opacity: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+
+        .slide.fade-out .text-section {
+            animation: fadeOut 0.8s ease-out forwards;
+        }
+
+        .burger-name {
+            font-size: 48px;
+            font-weight: 700;
+            color: #2c2c2c;
+            margin-bottom: 40px;
+            letter-spacing: -1px;
+        }
+
+        /* Enhanced ingredients list styling for better readability and centered layout */
+        .ingredients-list {
+            font-size: 18px;
+            color: #555;
+            line-height: 2;
+            list-style: none;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        .ingredients-list li {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 16px;
+            background: linear-gradient(135deg, #f5f1ed 0%, #faf7f4 100%);
+            border-radius: 14px;
+            border-left: 5px solid #c67c4e;
+            box-shadow: 0 4px 12px rgba(198, 124, 78, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .ingredients-list li:hover {
+            transform: translateX(8px);
+            box-shadow: 0 6px 16px rgba(198, 124, 78, 0.15);
+        }
+
+        .ingredients-list li:before {
+            content: "●";
+            color: #c67c4e;
+            font-weight: bold;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        /* Right Side - Burger Image */
+        .image-section {
+            flex: 0 0 45%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+
+        .burger-image {
+            width: 400px;
+            height: 400px;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            background-size: cover;
+            background-position: center;
+            background-color: #e8d5c4;
+            border: 8px solid #c67c4e;
+            animation: slideInRight 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(200px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOutRight {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(200px);
+                opacity: 0;
+            }
+        }
+
+        .slide.fade-out .burger-image {
+            animation: slideOutRight 0.8s ease-in forwards;
+        }
+
+        .burger-image::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 22px;
+            box-shadow: inset 0 0 30px rgba(255, 255, 255, 0.5), 0 0 30px rgba(198, 124, 78, 0.2);
+            pointer-events: none;
+        }
+
+        /* Slide Counter */
+        .slide-counter {
+            position: absolute;
+            bottom: 40px;
+            right: 120px;
+            font-size: 18px;
+            color: #999;
+            font-weight: 600;
+            letter-spacing: 1px;
+            z-index: 20;
+        }
+
+        /* Fullscreen Button */
+        .fullscreen-btn {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            width: 36px;
+            height: 36px;
+            border: 1.5px solid #c67c4e;
+            background: white;
+            color: #c67c4e;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 30;
+            font-weight: bold;
+        }
+
+        .fullscreen-btn:hover {
+            background: #c67c4e;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .fullscreen-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Slide Container */
+        .slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.8s ease;
+        }
+
+        .slide.active {
+            pointer-events: auto;
+            opacity: 1;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .content {
+                padding: 60px 80px;
+                gap: 60px;
+            }
+
+            .burger-image {
+                width: 300px;
+                height: 300px;
+            }
+
+            .text-section {
+                flex: 0 0 45%;
+            }
+
+            .burger-name {
+                font-size: 36px;
+            }
+
+            .ingredients-list {
+                font-size: 16px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 40px 20px;
+                flex-direction: column;
+                justify-content: space-around;
+            }
+
+            .content {
+                flex-direction: column;
+                padding: 40px 20px;
+            }
+
+            .text-section {
+                flex: 0 0 auto;
+                padding-right: 0;
+            }
+
+            .burger-image {
+                width: 250px;
+                height: 250px;
+            }
+
+            .burger-name {
+                font-size: 28px;
+            }
+
+            .ingredients-list {
+                font-size: 14px;
+                line-height: 1.8;
+            }
+
+            .slide-counter {
+                bottom: 20px;
+                right: 20px;
+                font-size: 16px;
+            }
+
+            .fullscreen-btn {
+                top: 15px;
+                right: 15px;
+                width: 40px;
+                height: 40px;
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Added intro page section -->
+        <div class="intro-page" id="intro-page">
+            <div class="parallax-bg">
+                <div class="parallax-item" style="background-image: url('./images/ChatGPT_Image_Dec_5__2025__07_10_27_AM-removebg-preview.png');"></div>
+                <div class="parallax-item" style="background-image: url('./images/ChatGPT_Image_Dec_5__2025__07_10_27_AM-removebg-preview.png');"></div>
+                <div class="parallax-item" style="background-image: url('./images/ChatGPT_Image_Dec_5__2025__07_10_27_AM-removebg-preview.png');"></div>
+                <div class="parallax-item" style="background-image: url('./images/ChatGPT_Image_Dec_5__2025__07_10_27_AM-removebg-preview.png');"></div>
+                <div class="parallax-item" style="background-image: url('./images/ChatGPT_Image_Dec_5__2025__07_10_27_AM-removebg-preview.png');"></div>
+                <div class="parallax-item" style="background-image: url('./images/ChatGPT_Image_Dec_5__2025__07_10_27_AM-removebg-preview.png');"></div>
+            </div>
+            <div class="intro-content">
+                <h1 class="intro-title">Our Menus</h1>
+                <p class="intro-subtitle">Premium Burger Selection</p>
+            </div>
+        </div>
+
+        <!-- Parallax Background -->
+        <div class="parallax-bg">
+            <div class="parallax-item" style="background-image: url('./images/ChatGPT_Image_Dec_5__2025__07_10_27_AM-removebg-preview.png');"></div>
+            <div class="parallax-item" style="background-image: url('./images/ChatGPT_Image_Dec_5__2025__07_10_27_AM-removebg-preview.png');"></div>
+            <div class="parallax-item" style="background-image: url('./images/ChatGPT_Image_Dec_5__2025__07_10_27_AM-removebg-preview.png');"></div>
+            <div class="parallax-item" style="background-image: url('./images/ChatGPT_Image_Dec_5__2025__07_10_27_AM-removebg-preview.png');"></div>
+            <div class="parallax-item" style="background-image: url('./images/ChatGPT_Image_Dec_5__2025__07_10_27_AM-removebg-preview.png');"></div>
+            <div class="parallax-item" style="background-image: url('./images/ChatGPT_Image_Dec_5__2025__07_10_27_AM-removebg-preview.png');"></div>
+        </div>
+
+        <!-- Slides Container -->
+        <div id="slides-container"></div>
+
+        <!-- Slide Counter -->
+        <div class="slide-counter">
+            <span id="current-slide">01</span> / <span id="total-slides">10</span>
+        </div>
+    </div>
+
+    <!-- Fullscreen Button -->
+    <button class="fullscreen-btn" id="fullscreen-btn" title="Toggle Fullscreen">⛶</button>
+
+    <script>
+        // Burger Data - 10 Slides
+        const burgers = [
+            {
+                name: "Classic Deluxe",
+                image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&h=400&fit=crop",
+                ingredients: ["Beef Patty", "Cheddar Cheese", "Lettuce", "Tomato", "Pickles", "Special Sauce"]
+            },
+            {
+                name: "Bacon Paradise",
+                image: "https://images.unsplash.com/photo-1553979459-d2229ba7433b?w=400&h=400&fit=crop",
+                ingredients: ["Beef Patty", "Crispy Bacon", "Swiss Cheese", "Caramelized Onions", "Garlic Aioli"]
+            },
+            {
+                name: "Mushroom Magic",
+                image: "https://images.unsplash.com/photo-1572802419224-7b1aca3a3a70?w=400&h=400&fit=crop",
+                ingredients: ["Beef Patty", "Sautéed Mushrooms", "Gruyère Cheese", "Truffle Oil", "Arugula"]
+            },
+            {
+                name: "Spicy Inferno",
+                image: "https://images.unsplash.com/photo-1567521464027-f127ff144326?w=400&h=400&fit=crop",
+                ingredients: ["Beef Patty", "Jalapeños", "Pepper Jack Cheese", "Sriracha Mayo", "Crispy Onions"]
+            },
+            {
+                name: "Premium Wagyu",
+                image: "https://images.unsplash.com/photo-1550547990-5343d3ffd72a?w=400&h=400&fit=crop",
+                ingredients: ["Wagyu Beef", "Foie Gras", "Truffle Cheese", "Gold Leaf", "Champagne Mustard"]
+            },
+            {
+                name: "Smokehouse BBQ",
+                image: "https://images.unsplash.com/photo-1554866585-acbb2b199633?w=400&h=400&fit=crop",
+                ingredients: ["Beef Patty", "Smoked Brisket", "Cheddar", "BBQ Sauce", "Crispy Bacon", "Onion Rings"]
+            },
+            {
+                name: "Garden Fresh",
+                image: "https://images.unsplash.com/photo-1585202900225-37b336dd4669?w=400&h=400&fit=crop",
+                ingredients: ["Veggie Patty", "Fresh Mozzarella", "Heirloom Tomato", "Pesto", "Roasted Peppers"]
+            },
+            {
+                name: "Double Stack Glory",
+                image: "https://images.unsplash.com/photo-1553979459-d2229ba7433b?w=400&h=400&fit=crop",
+                ingredients: ["Double Beef Patties", "American Cheese", "Pickles", "Mustard", "Crispy Bacon", "Special Sauce"]
+            },
+            {
+                name: "Mediterranean Dream",
+                image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=400&fit=crop",
+                ingredients: ["Lamb Patty", "Feta Cheese", "Tzatziki", "Roasted Red Peppers", "Kalamata Olives"]
+            },
+            {
+                name: "Gourmet Truffle",
+                image: "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=400&h=400&fit=crop",
+                ingredients: ["Angus Beef", "Black Truffle", "Aged Gruyère", "Caramelized Shallots", "Microgreens"]
+            }
+        ];
+
+        let currentSlide = 0;
+        let autoPlayInterval;
+        let showIntro = true;
+
+        // Initialize
+        function init() {
+            if (showIntro) {
+                setTimeout(() => {
+                    hideIntro();
+                }, 4000); // Show intro for 4 seconds
+            } else {
+                createSlides();
+                updateSlideCounter();
+                showSlide(0);
+                startAutoPlay();
+                setupEventListeners();
+            }
+        }
+
+        function hideIntro() {
+            const introPage = document.getElementById('intro-page');
+            introPage.classList.add('fade-out');
+            
+            setTimeout(() => {
+                introPage.style.display = 'none';
+                createSlides();
+                updateSlideCounter();
+                showSlide(0);
+                startAutoPlay();
+                setupEventListeners();
+            }, 1000);
+        }
+
+        // Create Slides
+        function createSlides() {
+            const container = document.getElementById('slides-container');
+            burgers.forEach((burger, index) => {
+                const slide = document.createElement('div');
+                slide.className = 'slide';
+                if (index === 0) slide.classList.add('active');
+
+                slide.innerHTML = `
+                    <div class="content">
+                        <div class="text-section">
+                            <h1 class="burger-name">${burger.name}</h1>
+                            <ul class="ingredients-list">
+                                ${burger.ingredients.map(ing => `<li>${ing}</li>`).join('')}
+                            </ul>
+                        </div>
+                        <div class="image-section">
+                            <div class="burger-image" style="background-image: url('${burger.image}');"></div>
+                        </div>
+                    </div>
+                `;
+
+                container.appendChild(slide);
+            });
+
+            document.getElementById('total-slides').textContent = String(burgers.length).padStart(2, '0');
+        }
+
+        // Show Slide
+        function showSlide(index) {
+            const slides = document.querySelectorAll('.slide');
+
+            // Fade out current slide
+            if (slides[currentSlide]) {
+                slides[currentSlide].classList.add('fade-out');
+                slides[currentSlide].classList.remove('active');
+            }
+
+            // Prepare for fade in
+            setTimeout(() => {
+                currentSlide = index % burgers.length;
+                slides[currentSlide].classList.remove('fade-out');
+                slides[currentSlide].classList.add('active');
+                updateSlideCounter();
+            }, 200);
+        }
+
+        // Update Counter
+        function updateSlideCounter() {
+            document.getElementById('current-slide').textContent = String(currentSlide + 1).padStart(2, '0');
+        }
+
+        // Auto Play
+        function startAutoPlay() {
+            autoPlayInterval = setInterval(() => {
+                showSlide(currentSlide + 1);
+            }, 7000);
+        }
+
+        function stopAutoPlay() {
+            clearInterval(autoPlayInterval);
+        }
+
+        function resetAutoPlay() {
+            stopAutoPlay();
+            startAutoPlay();
+        }
+
+        // Setup Event Listeners
+        function setupEventListeners() {
+            // Fullscreen
+            document.getElementById('fullscreen-btn').addEventListener('click', toggleFullscreen);
+
+            // Keyboard Navigation
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowRight') {
+                    showSlide(currentSlide + 1);
+                    resetAutoPlay();
+                } else if (e.key === 'ArrowLeft') {
+                    showSlide(currentSlide - 1);
+                    resetAutoPlay();
+                } else if (e.key === 'f') {
+                    toggleFullscreen();
+                } else if (e.key === 'Escape') {
+                    exitFullscreen();
+                }
+            });
+
+            // Mouse wheel for navigation
+            let lastWheelTime = 0;
+            document.addEventListener('wheel', (e) => {
+                const now = Date.now();
+                if (now - lastWheelTime > 1500) {
+                    if (e.deltaY > 0) {
+                        showSlide(currentSlide + 1);
+                    } else {
+                        showSlide(currentSlide - 1);
+                    }
+                    resetAutoPlay();
+                    lastWheelTime = now;
+                }
+            }, { passive: true });
+        }
+
+        // Fullscreen Toggle
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    console.log(`Error attempting to enable fullscreen: ${err.message}`);
+                });
+            } else {
+                exitFullscreen();
+            }
+        }
+
+        function exitFullscreen() {
+            if (document.fullscreenElement) {
+                document.exitFullscreen();
+            }
+        }
+
+        // Start the app
+        init();
+
+        // Handle visibility change to pause/resume autoplay
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                stopAutoPlay();
+            } else {
+                startAutoPlay();
+            }
+        });
+    </script>
+</body>
+</html>
